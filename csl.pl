@@ -1,0 +1,31 @@
+#!/usr/bin/perl
+{
+ csl_engine => {
+                   url      => 'http://ubcsl.ub.uni-bielefeld.de/citenode.php' ,
+                   format      => 'html' ,
+                   default_style => 'plos',
+                   recs     => 100,
+                   type_map => { 'article' => 'article',
+                                 'book' => 'book',
+                                 'book chapter' => 'chapter',
+                                 'book editor' => 'book',
+                                 'conference paper'=> 'chapter' ,
+                                 'journal editor'=> 'article', 
+                                 'preprint' => 'preprint' ,
+                                 'newspaper article' => 'article',
+                                 'thesis' => 'thesis',
+                                 'report' => 'book',
+                                 'review' => 'article',
+                                 'working Paper' => 'chapter' ,
+                                 'patent' => 'article',
+                                 'conference publication' => 'book',
+                                 'conference abstract' => 'chapter',
+                                 'preprint' => 'article' ,
+                                 'encyclopedia article' => 'article' ,
+                                 'Bi Dissertation'  => 'thesis' ,
+                                 'Bi BachelorThesis' => 'thesis' ,
+                                 'Bi MasterThesis'  => 'thesis',
+                                 'Bi PostdocThesis' => 'thesis',
+                                }
+                  } ,
+}
