@@ -26,9 +26,7 @@ use LWP::UserAgent;
 use JSON ;
 use URI::Escape;
 
-use luurCfg;                  # reading the PUB configuration
-my $cfg = new luurCfg;
-
+my $cfg;
 
 =head2 new
  
@@ -37,8 +35,15 @@ my $cfg = new luurCfg;
 =cut
 
 sub new {
- 
-  my ($invocant,%args) = @_;
+  my $invocant = shift;
+  my (%args) = @_;
+
+  $cfg = $args{cfg};
+  unless ($cfg) {
+    require luurCfg;
+    $cfg = luurCfg->new;
+  }
+
   my ($local_status, @errors);
 
   my ($package,$file,$line) = caller;
