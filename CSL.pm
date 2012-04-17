@@ -23,6 +23,7 @@ use warnings;
 
 use LWP::UserAgent;
 
+use Encode;
 use JSON ;
 use URI::Escape;
 
@@ -117,19 +118,18 @@ sub process {
         $record_hash{items}{$key}{id} =  $record->{recordid} ;      
 
         foreach my $unit (@{$record->{title}}){
-
-               $record_hash{items}{$key}{title} =  $unit ;            
+               $record_hash{items}{$key}{title} =  encode_utf8($unit);
                last ;
         }
 
         $record_hash{items}{$key}{type} = $cfg->{csl_engine}->{type_map}{$record->{type}} ;    
 
         if ( $record->{publisher}){
-           $record_hash{items}{$key}{publisher} =  $record->{publisher} ;        
+           $record_hash{items}{$key}{publisher} =  encode_utf8($record->{publisher});
         }
 
         if ( $record->{place}){
-           $record_hash{items}{$key}{'publisher-place'} =  $record->{place} ;  
+           $record_hash{items}{$key}{'publisher-place'} =  encode_utf8($record->{place});
         }
 
         push (@{$record_hash{items}{$key}{issued}{'date-parts'}}, [$record->{publ_year}] ) ;
@@ -138,8 +138,8 @@ sub process {
 
          my $author_hash = {} ;
 
-         $author_hash->{family} = $unit->{family} ;
-         $author_hash->{given} = $unit->{given} ;
+         $author_hash->{family} = encode_utf8($unit->{family});
+         $author_hash->{given} = encode_utf8($unit->{given});
 
           push (@{$record_hash{items}{$key}{author}}, $author_hash) ;
       }
@@ -147,8 +147,8 @@ sub process {
 
          my $author_hash = {} ;
 
-         $author_hash->{family} = $unit->{family} ;
-         $author_hash->{given} = $unit->{given} ;
+         $author_hash->{family} = encode_utf8($unit->{family});
+         $author_hash->{given} = encode_utf8($unit->{given});
 
           push (@{$record_hash{items}{$key}{author}}, $author_hash) ;
       }
@@ -157,8 +157,8 @@ sub process {
 
          my $editor_hash = {} ;
 
-         $editor_hash->{family} = $unit->{family} ;
-         $editor_hash->{given} = $unit->{given} ;
+         $editor_hash->{family} = encode_utf8($unit->{family});
+         $editor_hash->{given} = encode_utf8($unit->{given});
 
           push (@{$record_hash{items}{$key}{editor}}, $editor_hash) ;
       }
@@ -176,7 +176,7 @@ sub process {
             $record_hash{items}{$key}{issue} = $unit->{issue} ;
          }
          if ( $unit->{title}){
-            $record_hash{items}{$key}{'container-title'} = $unit->{title} ;
+            $record_hash{items}{$key}{'container-title'} = encode_utf8($unit->{title});
          }
 
          if ( $unit->{volume}){
@@ -190,7 +190,7 @@ sub process {
             $record_hash{items}{$key}{issue} = $unit->{issue} ;
          }
 
-         $record_hash{items}{$key}{'collection-title'} = $unit->{title} ;
+         $record_hash{items}{$key}{'collection-title'} = encode_utf8($unit->{title});
 
          if ( $unit->{volume}){
 
@@ -214,7 +214,7 @@ sub process {
      $my_request->content ($req_content) ;
 
      my  $my_response = $my_ua->request($my_request);
- 
+
      my  $json = new JSON ;
 
      my $citation_ref = $json->decode( $my_response->content)  ;
