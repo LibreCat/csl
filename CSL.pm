@@ -225,7 +225,7 @@ sub process {
            my %temp ;
            $temp{id} = $citation_ref->{bibliography}[0]{entry_ids}[$i][0] ;
            
-           $temp{citation} = Encode::encode_utf8 ($element) ;
+           $temp{citation} = $element;
            $i++ ; 
            push (@return_array, {%temp} ) ;
      }
