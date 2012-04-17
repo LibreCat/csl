@@ -77,8 +77,6 @@ sub process {
 
    my $csl_ref ; 
 
-   my %record_hash ;
-
    my $start = 0 ;
 
    my $my_ua = LWP::UserAgent->new();
@@ -98,6 +96,7 @@ sub process {
 
 
    while ($start < $limit){     # calling the csl engine with packages to avoid http limits
+      my %record_hash;
 
       my $i = 1 ;
 
@@ -200,6 +199,7 @@ sub process {
     
       $i++ ;
     } # foreach
+    $start += $range;
 
     my $json_citation = create_json (\%record_hash) ;
 
@@ -217,7 +217,11 @@ sub process {
 
      my  $json = new JSON ;
 
-     my $citation_ref = $json->decode( $my_response->content)  ;
+     my $citation_ref = eval { $json->decode( $my_response->content) };
+     # What would be a sensible behavior on citeproc failure?  Probably better
+     # to report it than to silently proceed, but, on the other hand, it's
+     # possible that a later citation in the batch may succeed.
+     next if $@;
 
      $i = 0 ;
      foreach my $element ( @{$citation_ref->{bibliography}[1]}){
@@ -229,10 +233,6 @@ sub process {
            $i++ ; 
            push (@return_array, {%temp} ) ;
      }
-
-     $start += $range ;
-     %record_hash = () ;
-       
    }  #while
  
    return \@return_array ;
