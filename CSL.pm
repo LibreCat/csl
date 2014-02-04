@@ -208,6 +208,7 @@ sub process {
      my  $temp_citeproc_url ;
 
      my $req_content = "data=$json_citation&style=$style&outputformat=$cfg->{csl_engine}{format}" ;
+     $req_content .= "&locale=$hash_ref->{locale}" if $hash_ref->{locale};
 
      my  $my_request = HTTP::Request->new (POST => $citeproc_url) ;
      $my_request->content_type('application/x-www-form-urlencoded');
